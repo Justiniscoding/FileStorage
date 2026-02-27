@@ -5,8 +5,8 @@ export async function POST({ request }): Promise<Response> {
 	const data = await request.formData();
 	const file = data.get('file') as File;
 	if (file) {
-		parseFile(file);
-		return json({ url: "abcdefgh" }, { status: 201 });
+		const fileData = await parseFile(file);
+		return json(fileData, { status: 201 });
 	}
 	return json({ success: "false" })
 }

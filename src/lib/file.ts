@@ -1,23 +1,16 @@
 import sharp from "sharp";
 
-export function parseFile(file: File): Promise<void> {
+export function parseFile(file: File): Promise<Object> {
 	return new Promise(async resolve => {
 		const arrayBuffer = await file.arrayBuffer();
 		const buffer = Buffer.from(arrayBuffer);
 
 		const nameLength = file.name.length;
-		// const fileNameBuffer = Buffer.alloc(nameLength + 1);
 		const fileNameArray = new Uint8Array(Buffer.from(file.name));
 		const fileNameWithLengthArray = new Uint8Array(nameLength + 1);
 
 		fileNameWithLengthArray[0] = nameLength;
 		fileNameWithLengthArray.set(fileNameArray, 1);
-
-		// fileNameBuffer[0] = nameLength;
-
-		// for(let i = 0; i < nameLength; i++){
-		// 	fileNameBuffer[i + 1] = file.name.charAt(i);
-		// }
 
 		const imagePixelArray = Uint8Array.from(buffer);
 
@@ -42,15 +35,18 @@ export function parseFile(file: File): Promise<void> {
 
 		const fullImage = Buffer.concat([fileNameWithLengthArray, imagePixelArray, paddingElements]);
 
-		sharp(fullImage, {
+		const imageString = await sharp(fullImage, {
 			raw: {
 				width: factor1,
 				height: factor2,
 				channels: 4
 			}
-		}).png().toFile("file.png");
+		}).png().toBuffer();
 
-		resolve();
+		resolve({
+			file: `data:image/png;base64,${imageString.toString("base64")}`,
+			fileName: `encoded ${file.name}`
+		});
 	});
 }
 

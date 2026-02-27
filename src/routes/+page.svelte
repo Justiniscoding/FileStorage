@@ -1,17 +1,28 @@
 <script lang="ts">
-	let uploadedFile: FileList;
+	let fileToDecode: FileList;
+	let fileToEncode: FileList;
 
-	function submitForm(event: SubmitEvent): void {
-		if (uploadedFile.length == 0) {
-			return;
+	function submitForm(event: SubmitEvent, type: String): void {
+		if (type == "upload") {
+			if (fileToEncode.length == 0) {
+				return;
+			}
+		} else {
+			if (fileToDecode.length == 0) {
+				return;
+			}
 		}
 
 		event.preventDefault();
 
 		const formData = new FormData();
-		formData.append("file", uploadedFile[0]);
+		if (type == "upload") {
+			formData.append("file", fileToEncode[0]);
+		} else {
+			formData.append("file", fileToDecode[0]);
+		}
 
-		fetch("/decodeFile", {
+		fetch(type == "upload" ? "/uploadFile" : "/decodeFile", {
 			method: "POST",
 			body: formData,
 		})
@@ -34,8 +45,13 @@
 </script>
 
 <h1>File Storage</h1>
-<form action="/uploadFile" method="POST" enctype="multipart/form-data">
-	<input type="file" name="file" />
+<form
+	action="/uploadFile"
+	method="POST"
+	enctype="multipart/form-data"
+	onsubmit={(e) => submitForm(e, "upload")}
+>
+	<input type="file" name="file" bind:files={fileToEncode} />
 	<input type="submit" />
 </form>
 
@@ -43,9 +59,9 @@
 	action="/decodeFile"
 	method="POST"
 	enctype="multipart/form-data"
-	onsubmit={submitForm}
+	onsubmit={(e) => submitForm(e, "decode")}
 >
 	<label for="file">File to decode</label>
-	<input type="file" name="file" id="file" bind:files={uploadedFile} />
+	<input type="file" name="file" id="file" bind:files={fileToDecode} />
 	<input type="submit" />
 </form>
