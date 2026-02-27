@@ -75,7 +75,7 @@ export function decodeFile(file: File): Promise<Object> {
 			}
 		}
 
-		const fileBuffer = data.slice(data[0], info.size - cutoffAmount - 1);
+		const fileBuffer = data.slice(data[0] + 1, info.size - cutoffAmount - 1);
 
 		let fileName = data.slice(1, data[0] + 1).toString();
 
