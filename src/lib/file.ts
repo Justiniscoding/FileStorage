@@ -46,7 +46,7 @@ export function parseFile(file: File): Promise<Object> {
 
 		resolve({
 			file: `data:image/png;base64,${imageString.toString("base64")}`,
-			fileName: `encoded ${file.name}`
+			fileName: `Encoded ${file.name}`
 		});
 	});
 }
@@ -70,8 +70,6 @@ export function decodeFile(file: File): Promise<Object> {
 				if (zeroAmount == data[i]) {
 					cutoffAmount = zeroAmount + 1;
 					break;
-				} else {
-					// TODO : Throw an error for incompatible image
 				}
 			}
 		}

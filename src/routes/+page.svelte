@@ -1,67 +1,35 @@
 <script lang="ts">
-	let fileToDecode: FileList;
-	let fileToEncode: FileList;
-
-	function submitForm(event: SubmitEvent, type: String): void {
-		if (type == "upload") {
-			if (fileToEncode.length == 0) {
-				return;
-			}
-		} else {
-			if (fileToDecode.length == 0) {
-				return;
-			}
-		}
-
-		event.preventDefault();
-
-		const formData = new FormData();
-		if (type == "upload") {
-			formData.append("file", fileToEncode[0]);
-		} else {
-			formData.append("file", fileToDecode[0]);
-		}
-
-		fetch(type == "upload" ? "/uploadFile" : "/decodeFile", {
-			method: "POST",
-			body: formData,
-		})
-			.then((response) => {
-				return response.json();
-			})
-			.then((data) => {
-				const a = document.createElement("a");
-
-				a.href = data.file;
-				a.download = data.fileName;
-
-				document.body.appendChild(a);
-
-				a.click();
-
-				document.body.removeChild(a);
-			});
-	}
+	import EncodeDecode from "$lib/components/EncodeDecode.svelte";
 </script>
 
-<h1>File Storage</h1>
-<form
-	action="/uploadFile"
-	method="POST"
-	enctype="multipart/form-data"
-	onsubmit={(e) => submitForm(e, "upload")}
->
-	<input type="file" name="file" bind:files={fileToEncode} />
-	<input type="submit" />
-</form>
+<h1>Imagify Anything!</h1>
+<p>
+	This website allows you to turn <u><b>any</b></u> file into an image for easier
+	sharing with others :) Just encode your file, send it to all of your friends
+	(if any), and then decode it back into its former glory!
+</p>
 
-<form
-	action="/decodeFile"
-	method="POST"
-	enctype="multipart/form-data"
-	onsubmit={(e) => submitForm(e, "decode")}
->
-	<label for="file">File to decode</label>
-	<input type="file" name="file" id="file" bind:files={fileToDecode} />
-	<input type="submit" />
-</form>
+<div class="encodeDecodeContainer">
+	<EncodeDecode />
+</div>
+
+<style>
+	:global(:root) {
+		color-scheme: light dark;
+	}
+
+	:global(body) {
+		background-color: light-dark(#fcfcfc, #10141c);
+	}
+
+	.encodeDecodeContainer {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	h1,
+	p {
+		text-align: center;
+	}
+</style>
