@@ -1,4 +1,5 @@
 import sharp from "sharp";
+import mime from 'mime';
 
 export function parseFile(file: File): Promise<Object> {
 	return new Promise(async resolve => {
@@ -77,9 +78,20 @@ export function decodeFile(file: File): Promise<Object> {
 
 		const fileBuffer = data.slice(data[0] + 1, info.size - cutoffAmount - 1);
 
-		let fileName = data.slice(1, data[0] + 1).toString();
+		const fileName = data.slice(1, data[0] + 1).toString();
 
-		const base64 = `data:text/plain;base64,` + fileBuffer.toString("base64");
+		const fileExtension = fileName.match(/\.[a-zA-Z0-9]+$/);
+
+		let fileType = "text/plain";
+
+		if (fileExtension) {
+			let mimeType = mime.getType(fileExtension[0]);
+			if (mimeType) {
+				fileType = mimeType;
+			}
+		}
+
+		const base64 = `data:${fileType};base64,` + fileBuffer.toString("base64");
 
 		resolve({
 			file: base64,
