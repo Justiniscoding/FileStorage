@@ -37,16 +37,14 @@
 
 <div class="container">
 	<div class="titleBar">
-		<button
-			class="titleOption"
-			class:selected={isEncoding}
-			onclick={() => (isEncoding = !isEncoding)}>Encode</button
+		<button class="titleOption" onclick={() => (isEncoding = true)}
+			>Encode</button
 		>
-		<button
-			class="titleOption"
-			class:selected={!isEncoding}
-			onclick={() => (isEncoding = !isEncoding)}>Decode</button
+		<button class="titleOption" onclick={() => (isEncoding = false)}
+			>Decode</button
 		>
+		<div class="titleStaticBackground"></div>
+		<div class="titleMovingBackground" class:selected={isEncoding}></div>
 	</div>
 	<form
 		action="/decodeFile"
@@ -81,23 +79,60 @@
 
 	.titleBar {
 		width: 100%;
+		height: 2vw;
 
 		display: flex;
 		flex-direction: row;
+
+		position: relative;
+	}
+
+	.titleStaticBackground {
+		background-color: #f39193;
+		width: 100%;
+		height: 100%;
+
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	.titleMovingBackground {
+		width: 50%;
+		height: 100%;
+
+		background-color: #73b8ff;
+		position: absolute;
+		top: 0;
+		left: 0;
+
+		transition: 0.5s;
+		transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+
+		transform: translateX(100%);
+	}
+
+	.selected {
+		transform: translateX(0);
 	}
 
 	.titleOption {
 		width: 50%;
-		height: 2vw;
+		height: 100%;
 		text-align: center;
 		border: none;
-		transition: 0.2s;
 		cursor: pointer;
+
+		color: black;
+		background-color: transparent;
+
+		z-index: 11;
+		/* background-color: red; */
 	}
 
-	.titleOption.selected {
-		background-color: #97c142;
-	}
+	/* .titleOption.selected { */
+	/* 	background-color: #97c142; */
+	/* } */
 
 	form {
 		display: flex;
