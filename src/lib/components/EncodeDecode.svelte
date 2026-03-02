@@ -52,7 +52,7 @@
 		enctype="multipart/form-data"
 		onsubmit={submitForm}
 	>
-		<p>Upload your file here</p>
+		<p class="uploadText">Upload your file here!</p>
 		<input
 			type="file"
 			name="file"
@@ -60,7 +60,9 @@
 			bind:files={uploadedFiles}
 			accept="image/*"
 		/>
-		<button type="submit">{isEncoding ? "Encode" : "Decode"}</button>
+		<button type="submit" class="encodeButton"
+			>{isEncoding ? "Encode" : "Decode"}</button
+		>
 	</form>
 </div>
 
@@ -88,7 +90,7 @@
 	}
 
 	.titleStaticBackground {
-		background-color: #f39193;
+		background-color: #b09165;
 		width: 100%;
 		height: 100%;
 
@@ -101,7 +103,7 @@
 		width: 50%;
 		height: 100%;
 
-		background-color: #73b8ff;
+		background-color: #59c2ff;
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -127,15 +129,40 @@
 		background-color: transparent;
 
 		z-index: 11;
-		/* background-color: red; */
 	}
-
-	/* .titleOption.selected { */
-	/* 	background-color: #97c142; */
-	/* } */
 
 	form {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
+	}
+
+	#file {
+		background-color: #ff8f40;
+		padding: 1vw 2vw;
+		border: 0.1vw dashed #5a6673;
+		border-radius: 0.5vw;
+		margin-bottom: 2vw;
+	}
+
+	#file::file-selector-button {
+		border: none;
+		background-color: #333;
+		margin-right: 2vw;
+	}
+
+	.uploadText {
+		text-align: center;
+		font-family: monospace;
+		font-size: 1vw;
+	}
+
+	.encodeButton {
+		border: 0.1vw solid black;
+		padding: 0.75vw 1vw;
+		width: 15vw;
+		cursor: pointer;
+		border-radius: 0.5vw;
+		font-size: 1vw;
 	}
 </style>
